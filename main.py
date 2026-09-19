@@ -4,7 +4,7 @@ import struct
 import os
 
 def save_wt(filename, frames, use_full_16bit=False):
-    """Write normalized waveform frames to a binary ``.wt`` file.
+    """Write normalised waveform frames to a binary ``.wt`` file.
 
     The file begins with a 12-byte little-endian header:
 
@@ -23,7 +23,7 @@ def save_wt(filename, frames, use_full_16bit=False):
     Args:
         filename: Destination path for the binary waveform file.
         frames: Non-empty sequence of equally sized, float-like waveform
-            frames. Each frame should contain normalized samples.
+            frames. Each frame should contain normalised samples.
         use_full_16bit: If ``True``, use full-range int16 scaling and set the
             corresponding format flag. If ``False``, use half-range scaling.
 
@@ -68,7 +68,7 @@ def normalize(wave):
     Note:
         This function does not clip the result. If ``wave`` contains finite
         values, the returned samples should fall within ``[-1.0, 1.0]`` when
-        normalization occurs.
+        normalisation occurs.
     """
     peak = np.max(np.abs(wave))
     if peak > 1e-9:
@@ -82,7 +82,7 @@ def soft_clip(x, drive=1.15):
     tangent function. Small signals remain approximately linear, while larger
     amplitudes are progressively compressed toward the bounded range
     ``(-1.0, 1.0)``. This produces a softer alternative to hard clipping and
-    can help create mild analog-style overdrive or saturation.
+    can help create mild analogue-style overdrive or saturation.
 
     Args:
         x: Scalar or array-like signal values.
@@ -97,7 +97,7 @@ def soft_clip(x, drive=1.15):
     return np.tanh(x * drive)
 
 def double_pendulum(t, y):
-    """Compute the state derivatives for a normalized double pendulum.
+    """Compute the state derivatives for a normalised double pendulum.
 
     This function models a planar double pendulum using angular coordinates
     and angular velocities. The state vector is ordered as::
@@ -106,13 +106,13 @@ def double_pendulum(t, y):
 
     where ``theta1`` and ``theta2`` are the angles of the two pendulum arms
     and ``dtheta1`` and ``dtheta2`` are their corresponding angular
-    velocities. The returned vector has the same ordering and contains::
+    velocities. The returned vector has the same ordering and contains:
 
         [dtheta1, ddtheta1, dtheta2, ddtheta2]
 
     The equations include gravitational coupling, relative-angle coupling,
     and velocity-dependent terms between the two pendulum arms. The
-    formulation assumes fixed, normalized physical parameters; masses,
+    formulation assumes fixed, normalised physical parameters; masses,
     lengths, and gravitational acceleration are incorporated into the
     constants in the equations.
 
@@ -185,9 +185,9 @@ def make_cycle_from_signal(sig, size=2048):
     """Convert a one-dimensional signal segment into a loopable waveform cycle.
 
     The input segment is linearly resampled to exactly ``size`` samples,
-    centered by removing its DC offset, and peak-normalized. A short linear
+    centred by removing its DC offset, and peak-normalised. A short linear
     fade is then applied at both ends to reduce discontinuities and audible
-    clicks when the resulting cycle is looped. The cycle is normalized again
+    clicks when the resulting cycle is looped. The cycle is normalised again
     after fading because the envelope may reduce its peak amplitude.
 
     Signals shorter than four samples cannot provide a useful cycle and
@@ -201,8 +201,8 @@ def make_cycle_from_signal(sig, size=2048):
 
     Returns:
         numpy.ndarray: A ``float32`` waveform containing exactly ``size``
-        samples. For a valid input, the result is approximately centered
-        around zero and peak-normalized; for an input shorter than four
+        samples. For a valid input, the result is approximately centred
+        around zero and peak-normalised; for an input shorter than four
         samples, it contains only zeros.
     """
     n = len(sig)
@@ -212,7 +212,7 @@ def make_cycle_from_signal(sig, size=2048):
     x_old = np.linspace(0, 1, n, endpoint=False)
     x_new = np.linspace(0, 1, size, endpoint=False)
     cycle = np.interp(x_new, x_old, sig)
-    # Remove DC and normalize
+    # Remove DC and normalise
     cycle = cycle - np.mean(cycle)
     cycle = normalize(cycle)
     # Gentle fade at ends to reduce clicks when looping (optional but nice)
@@ -227,12 +227,12 @@ def make_cycle_from_signal(sig, size=2048):
 
 def extract_frames_from_trajectory(t, state, n_frames=64, size=2048,
                                                             mode="tip_x"):
-    """Extract normalized wavetable frames from a simulated trajectory.
+    """Extract normalised wavetable frames from a simulated trajectory.
 
     The trajectory is divided into windows after skipping the first 5% of
     samples to avoid early transients. Each window is converted into one
     loopable cycle with ``make_cycle_from_signal``, gently soft-clipped for
-    additional character, and peak-normalized before being added to the
+    additional character, and peak-normalised before being added to the
     output.
 
     Args:
@@ -256,11 +256,11 @@ def extract_frames_from_trajectory(t, state, n_frames=64, size=2048,
               difference, and second-arm angular velocity.
             * ``"potential"`` — a cosine-based potential-energy proxy.
 
-            Unrecognized values fall back to ``"tip_x"``.
+            Unrecognised values fall back to ``"tip_x"``.
 
     Returns:
         list: A list containing ``n_frames`` NumPy ``float32`` arrays, each
-        with shape ``(size,)``. Frames are centered, normalized, softly
+        with shape ``(size,)``. Frames are centred, normalised, softly
         clipped, and suitable for use as wavetable cycles.
     """
     theta1, dth1, theta2, dth2 = state
@@ -277,7 +277,7 @@ def extract_frames_from_trajectory(t, state, n_frames=64, size=2048,
     win = max(size // 2, usable // (n_frames + 2))  # window length in samples
 
     for i in range(n_frames):
-        # Center of window advances through the trajectory
+        # Centre of window advances through the trajectory
         center = start + int((i + 0.5) * usable / n_frames)
         a = max(0, center - win // 2)
         b = min(N, a + win)
@@ -327,7 +327,7 @@ def main():
         ("Chaos_E", np.array([np.random.uniform(-1, 1)*np.pi, 0.0, \
                                     np.random.uniform(-1, 1)*np.pi, 0.0])),
     ]
-    # Curated set of 10 interesting tables
+    # Set of 10 interesting tables
     curated = [
         ("01_Chaos_TipX_A",        ics[0][1], "tip_x",   64, 2048),
         ("02_Chaos_TipY_A",        ics[0][1], "tip_y",   64, 2048),
