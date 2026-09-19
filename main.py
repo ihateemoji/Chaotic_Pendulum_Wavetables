@@ -26,10 +26,6 @@ def save_wt(filename, frames, use_full_16bit=False):
             frames. Each frame should contain normalised samples.
         use_full_16bit: If ``True``, use full-range int16 scaling and set the
             corresponding format flag. If ``False``, use half-range scaling.
-
-    Raises:
-        IndexError: If ``frames`` is empty.
-        OSError: If the destination cannot be opened or written.
     """
     wave_size = len(frames[0])
     wave_count = len(frames)
@@ -64,11 +60,6 @@ def normalize(wave):
         A waveform with peak absolute amplitude of approximately ``1.0``,
         or the original waveform unchanged when its peak is at most
         ``1e-9``.
-
-    Note:
-        This function does not clip the result. If ``wave`` contains finite
-        values, the returned samples should fall within ``[-1.0, 1.0]`` when
-        normalisation occurs.
     """
     peak = np.max(np.abs(wave))
     if peak > 1e-9:
