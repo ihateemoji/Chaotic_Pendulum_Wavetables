@@ -159,6 +159,9 @@ def simulate(y0, t_span=(0.0, 80.0), dt=0.005):
                 one state variable, and each column corresponds to a time
                 value in ``t``.
     """
+    print("\nSimulating trajectory with initial state:")
+    print(y0)
+    print("\n")
     t_eval = np.arange(t_span[0], t_span[1], dt)
     sol = solve_ivp(
         double_pendulum,
