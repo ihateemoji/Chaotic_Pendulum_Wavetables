@@ -1,6 +1,6 @@
 # Chaotic Double Pendulum Wavetables
 
-Generates morphing `.wt` wavetables from the chaotic double pendulum system for use in Surge XT, Cardinal, and other wavetable synths.
+Generates morphing `.wt` wavetables from the chaotic double pendulum system for use in Bitwig, Surge XT, Cardinal, and other wavetable synths.
 
 ## Requirements
 
@@ -25,4 +25,4 @@ cd Chaotic_Pendulum_Wavetables
 python3 main.py
 ```
 
-Output goes to `Chaotic_Pendulum_Wavetables/`.
+Output goes to `Chaotic_Pendulum_Wavetables/`. The simplest way to try them out is to drag one of the generated `.wt` files straight into Bitwig's wavetable module. 
